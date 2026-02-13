@@ -34,12 +34,11 @@ This project is a secure e-commerce shopping website backend developed using Jav
 1. **Clone the repository:**
 
    ```sh
-   git clone https://github.com/Adikumaw/stella.git
+   git clone https://github.com/kumawat-aditya/stella.git
    cd stella
    ```
 
 2. **Set up the database:**
-
    - Create a database named `stella_db` in MySQL/MariaDB.
    - Update the database configuration in `src/main/resources/application.properties` with your database credentials.
 
@@ -140,4 +139,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 **Aditya Kumawat**  
 Email: [kumawataditya105@gmail.com](mailto:kumawataditya105@gmail.com)  
 LinkedIn: [Aditya Kumawat](http://www.linkedin.com/in/adityakumawat105)  
-GitHub: [Adikumaw](http://github.com/Adikumaw)
+GitHub: [kumawat-aditya](http://github.com/kumawat-aditya)
