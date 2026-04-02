@@ -1,142 +1,136 @@
-# Stella | A Shopping Website ( Backend )
+# Stella — E-Commerce Backend API
 
-## Project Overview
+Stella is a full-featured, RESTful e-commerce backend built with **Spring Boot 3**. It provides a complete platform for buyers and sellers: user registration with email verification, JWT-based stateless authentication, product management with multi-image file uploads, a multi-cart shopping system, Razorpay-integrated order and payment processing, seller dashboards with order status management, and a product review and rating system.
 
-This project is a secure e-commerce shopping website backend developed using Java Spring Boot. It includes user authentication, product management, review and ratings, order management, and payment gateway integration to provide a complete online shopping experience.
+---
 
-## Features
+## Tech Stack
 
-- **User Authentication:** Secure user registration and login using Spring Security and JWT Authentication.
-- **Product Management:** RESTful APIs to manage product listings, including adding, updating, and deleting products.
-- **Order Management:** RESTful APIs to handle orders, including creating, viewing, and managing orders.
-- **Payment Gateway Integration:** Seamless and secure payment processing for orders.
+| Layer     | Technology                                         |
+| --------- | -------------------------------------------------- |
+| Language  | Java 17                                            |
+| Framework | Spring Boot 3.3.1                                  |
+| Security  | Spring Security 6 + JWT (jjwt 0.12.5)              |
+| ORM       | Spring Data JPA (Hibernate)                        |
+| Database  | MariaDB                                            |
+| Payments  | Razorpay Java SDK 1.4.6                            |
+| Email     | Spring Mail (SMTP / Gmail)                         |
+| File I/O  | Apache Commons IO 2.16.1                           |
+| Build     | Maven (spring-boot-maven-plugin)                   |
+| Utilities | Lombok, Spring Boot Actuator, Spring Boot DevTools |
 
-## Technologies Used
+---
 
-- **Backend Framework:** Spring Boot
-- **Security:** Spring Security, JWT
-- **Database:** MySQL/MariaDB
-- **Payment Gateway:** Integration with a popular payment gateway (e.g., Stripe, PayPal)
-- **Tools:** Visual Studio Code, Eclipse, Git, GitHub
-- **Languages:** Java, SQL
+## Prerequisites
 
-## Getting Started
+- **Java 17** or higher
+- **Maven 3.8+**
+- **MariaDB** (or compatible MySQL) running locally on port `3306`
+- A **Gmail account** with an App Password configured for outbound email
+- A **Razorpay** test account for payment processing
 
-### Prerequisites
+---
 
-- Java 8 or higher
-- Maven
-- MySQL or MariaDB
-- IDE (e.g., Visual Studio Code, Eclipse)
+## Installation & Running Locally
 
-### Installation
+### 1. Clone the repository
 
-1. **Clone the repository:**
+```bash
+git clone https://github.com/kumawat-aditya/stella.git
+cd stella
+```
 
-   ```sh
-   git clone https://github.com/kumawat-aditya/stella.git
-   cd stella
-   ```
+### 2. Create the database
 
-2. **Set up the database:**
-   - Create a database named `stella_db` in MySQL/MariaDB.
-   - Update the database configuration in `src/main/resources/application.properties` with your database credentials.
+```sql
+CREATE DATABASE ecommerce;
+CREATE USER 'ecommerce'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON ecommerce.* TO 'ecommerce'@'localhost';
+FLUSH PRIVILEGES;
+```
 
-3. **Build the project:**
+### 3. Configure application properties
 
-   ```sh
-   mvn clean install
-   ```
+Edit `src/main/resources/application.properties` with your credentials. See the [Environment Variables](#environment-variables) table below for all required keys.
 
-4. **Run the application:**
-   ```sh
-   mvn spring-boot:run
-   ```
+### 4. Build and run
 
-### API Endpoints
+```bash
+./mvnw spring-boot:run
+```
 
-#### User Management
+The API will be available at `http://localhost:8080`.
 
-- **Register User:** `POST /api/users/register`
-- **Registration Verification:** `POST /api/users/verify-user?token=token`
-- **Resend Registration Verification:** `POST /api/users/register/resend-token`
-- **Login User:** `POST /api/auth/login`
-- **Fetch User Details:** `GET /api/users`
-- **Update User Name:** `PUT /api/users/name`
-- **Update User Number:** `PUT /api/users/number`
-- **Update User Email:** `PUT /api/users/email`
-- **Update User Password:** `PUT /api/users/password`
-- **Verify Update Details:** `POST /api/users/verify-update?token=token`
-- **Deactivate User Account:** `PUT /api/users/de-activate`
-- **Save User Address:** `POST /api/users/address`
-- **Fetch User Addresses:** `GET /api/users/address`
-- **Update User Address:** `PUT /api/users/address`
-- **Delete User Address:** `DELETE /api/users/address?id=ID`
+---
 
-#### Seller Management
+## Environment Variables
 
-- **Seller Registration:** `POST /api/sellers/register`
-- **Upgrade User to Seller:** `POST /api/sellers/upgrade`
-- **Update Store Name:** `PUT /api/sellers/store-name`
-- **Update Seller Address:** `PUT /api/sellers/address`
-- **Set Store Logo:** `POST /api/sellers/logo`
-- **Update Store Logo:** `PUT /api/sellers/logo`
-- **Verify Update:** `POST /api/sellers/verify-update?token=TOKEN`
+All configuration lives in `src/main/resources/application.properties`. **Never commit real credentials.**
 
-### Seller Dashboard
+| Key                                                | Description                                                            |
+| -------------------------------------------------- | ---------------------------------------------------------------------- |
+| `spring.datasource.url`                            | JDBC URL for MariaDB (e.g., `jdbc:mariadb://localhost:3306/ecommerce`) |
+| `spring.datasource.username`                       | Database user                                                          |
+| `spring.datasource.password`                       | Database password                                                      |
+| `spring.mail.host`                                 | SMTP host (e.g., `smtp.gmail.com`)                                     |
+| `spring.mail.port`                                 | SMTP port (e.g., `587`)                                                |
+| `spring.mail.username`                             | Sender Gmail address                                                   |
+| `spring.mail.password`                             | Gmail App Password (16 characters)                                     |
+| `spring.mail.properties.mail.smtp.auth`            | Enable SMTP auth (`true`)                                              |
+| `spring.mail.properties.mail.smtp.starttls.enable` | Enable TLS (`true`)                                                    |
+| `spring.servlet.multipart.max-file-size`           | Max single file upload size (e.g., `10MB`)                             |
+| `spring.servlet.multipart.max-request-size`        | Max total multipart request size (e.g., `10MB`)                        |
+| `razorpay.key.id`                                  | Razorpay API Key ID                                                    |
+| `razorpay.secret.key`                              | Razorpay API Secret Key                                                |
 
-- **Fetch Orders for Seller:** `GET /api/sellers/dashboard`
-- **Update Order Status for Seller:** `POST /api/sellers/dashboard/update-order-status`
-- **Fetch Products for Seller:** `GET /api/sellers/dashboard/products`
+---
 
-#### Product Management
+## Folder Structure
 
-- **Create Product:** `POST /api/products`
-- **Update Product:** `PUT /api/products`
-- **Search Products by Store Name:** `GET /api/products/store?store=STORE-NAME`
-- **Search Product by Name:** `GET /api/products/search?search=PRODUCT-NAME`
-- **Deactivate Product:** `DELETE /api/products/de-activate?id=ID`
-- **Activate Product:** `POST /api/products/activate?id=ID`
+```
+Stella/
+├── pom.xml
+├── README.md
+├── docs/
+│   ├── ARCHITECTURE.md          # System design, ERD, and data flow
+│   ├── API_REFERENCE.md         # All REST endpoints with payloads
+│   └── BACKEND_FLOW.md          # Request lifecycle and internal execution paths
+└── src/
+    └── main/
+        ├── java/com/nothing/stella/
+        │   ├── StellaApplication.java       # Spring Boot entry point
+        │   ├── controller/                  # REST controllers (request routing)
+        │   ├── entity/                      # JPA entities (database tables)
+        │   ├── model/                       # DTOs (request/response payloads)
+        │   ├── repository/                  # Spring Data JPA repositories
+        │   ├── services/                    # Business logic (interfaces + impls)
+        │   ├── security/                    # JWT filter, entry point, UserDetailsService
+        │   ├── exception/                   # Custom exception classes
+        │   ├── exceptionHandler/            # Global @ControllerAdvice handler
+        │   ├── errorResponse/               # Structured error response models
+        │   └── miscellaneous/               # Input validators, email templates
+        └── resources/
+            ├── application.properties
+            └── static/
+                ├── products/                # Uploaded product images ({userId}/{name}/)
+                └── storeLogos/              # Uploaded seller logos ({userId}/)
+```
 
-#### Review And Rating Management
+---
 
-- **Create Review:** `POST /api/review-rating`
-- **Update Review:** `PUT /api/review-rating/ID`
-- **Fetch Reviews By Product ID:** `GET /api/products/review-rating`
-- **Fetch Reviews For User:** `GET /api/users/review-rating`
-- **Get Averate Product Rating:** `GET /api/products/average-rating`
+## Quick Links
 
-#### Order Management
+| Document                                       | Description                                                                  |
+| ---------------------------------------------- | ---------------------------------------------------------------------------- |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)   | System design, architecture diagrams, ERD, and key design patterns           |
+| [docs/API_REFERENCE.md](docs/API_REFERENCE.md) | Full REST API reference with all endpoints and request/response payloads     |
+| [docs/BACKEND_FLOW.md](docs/BACKEND_FLOW.md)   | Internal request lifecycle, execution flow diagrams, error handling strategy |
 
-- **Create Order:** `POST /api/orders`
-- **Create Order By Cart:** `POST /api/orders/order-by-cart`
-- **Order Payment Callback:** `POST /api/orders/payment-callback`
-- **Fetch User Orders:** `GET /api/orders`
-- **Track Order:** `GET /api/orders/track?order_id=ID`
-
-#### Cart Management
-
-- **Crate Cart / Add to Cart:** `POST /api/users/cart`
-- **Update Cart:** `PUT /api/users/cart`
-- **Fetch Carts:** `GET /api/users/cart`
-- **Delete Cart:** `DELETE /api/users/cart`
-
-## Usage
-
-- **Swagger UI:** Access the API documentation at `http://localhost:8080/swagger-ui.html` after running the application.
-- **Admin Panel:** A simple admin panel for managing products can be added for convenience.
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request for any feature additions, bug fixes, or improvements.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+---
 
 ## Contact
 
-**Aditya Kumawat**  
-Email: [kumawataditya105@gmail.com](mailto:kumawataditya105@gmail.com)  
-LinkedIn: [Aditya Kumawat](http://www.linkedin.com/in/adityakumawat105)  
+**Aditya Kumawat**
+Email: [kumawataditya105@gmail.com](mailto:kumawataditya105@gmail.com)
+LinkedIn: [Aditya Kumawat](http://www.linkedin.com/in/adityakumawat105)
 GitHub: [kumawat-aditya](http://github.com/kumawat-aditya)
